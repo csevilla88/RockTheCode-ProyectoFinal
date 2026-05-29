@@ -1,0 +1,121 @@
+﻿.matches-page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.matches-page_header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.matches-page_title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-gray-900);
+}
+
+.matches-page_subtitle {
+  color: var(--color-gray-500);
+  margin-top: var(--space-sm);
+}
+
+.matches-page_filters {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+}
+
+.matches-page_filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.matches-page_filter label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.matches-page_filter select {
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  background: var(--bg-card);
+  color: var(--color-gray-800);
+  cursor: pointer;
+  min-width: 160px;
+  font-family: var(--font-primary);
+}
+
+.matches-page_filter select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.matches-page_count {
+  font-size: var(--fs-sm);
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-md);
+}
+
+.matches-page_error {
+  color: var(--color-danger);
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.matches-page_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-lg);
+}
+
+.matches-page_pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+}
+
+.matches-page_page-btn {
+  padding: var(--space-sm) var(--space-lg);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+}
+
+.matches-page_page-btn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.matches-page_page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.matches-page_page-info {
+  font-size: var(--fs-sm);
+  color: var(--color-gray-600);
+}
+
+@media (max-width: 480px) {
+  .matches-page_grid {
+    grid-template-columns: 1fr;
+  }
+}
+

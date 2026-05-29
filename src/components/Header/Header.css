@@ -1,0 +1,217 @@
+﻿.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header_container {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header_logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--color-white);
+}
+
+.header_logo-icon {
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+}
+
+.header_logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.header_logo-name {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-lg);
+  color: var(--color-secondary);
+  line-height: var(--lh-tight);
+}
+
+.header_logo-motto {
+  font-size: var(--fs-xs);
+  color: var(--color-gray-400);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.header_nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header_link {
+  color: var(--color-gray-200);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.header_link:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header_link--admin {
+  color: var(--color-secondary);
+}
+
+.header_link--profile {
+  color: var(--color-secondary-light);
+  font-weight: var(--fw-semibold);
+}
+
+.header_auth {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: var(--space-md);
+  padding-left: var(--space-md);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.header_btn {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+
+.header_btn--login {
+  color: var(--color-white);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header_btn--login:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-white);
+}
+
+.header_btn--register {
+  color: var(--color-primary-dark);
+  background: var(--color-secondary);
+}
+
+.header_btn--register:hover {
+  background: var(--color-secondary-light);
+}
+
+.header_btn--logout {
+  color: var(--color-white);
+  background: rgba(220, 53, 69, 0.8);
+  font-family: var(--font-primary);
+}
+
+.header_btn--logout:hover {
+  background: var(--color-danger);
+}
+
+/* Hamburger */
+.header_hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-sm);
+  z-index: calc(var(--z-header) + 1);
+}
+
+.header_hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-white);
+  transition: all var(--transition-base);
+  border-radius: 2px;
+}
+
+.header_hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.header_hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.header_hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header_hamburger {
+    display: flex;
+  }
+
+  .header_nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: var(--color-primary-dark);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: calc(var(--header-height) + var(--space-xl)) var(--space-xl) var(--space-xl);
+    transition: right var(--transition-base);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .header_nav.open {
+    right: 0;
+  }
+
+  .header_link {
+    width: 100%;
+    padding: var(--space-md);
+    font-size: var(--fs-base);
+  }
+
+  .header_auth {
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: var(--space-md);
+    margin-top: var(--space-md);
+  }
+
+  .header_btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+

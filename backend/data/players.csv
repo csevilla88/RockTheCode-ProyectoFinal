@@ -1,0 +1,98 @@
+﻿name;lastName;position;number;nationality;age;height;weight;goals;assists;yellowCards;redCards;matchesPlayed;status;bio
+Adrián;Molina;Portero;1;España;30;188;82;0;0;3;0;120;activo;Capitán y portero titular del CFS Malgrat desde 2020
+Carlos;Restrepo;Portero;13;Colombia;27;190;85;0;0;1;0;45;activo;Portero suplente con gran proyección internacional
+Lucas;Fernández;Portero;25;Argentina;22;185;78;0;0;0;0;10;activo;Joven promesa de la cantera malgratense/s
+Pablo;Sánchez;Portero;30;España;34;187;83;0;0;2;0;200;retirado;Leyenda del club con 200 partidos bajo los postes
+Marco;Rinaldi;Portero;31;Italia;28;192;86;0;0;4;0;95;retirado;Portero italiano que brilló durante tres temporadas
+Tomás;Herrera;Portero;33;Chile;31;186;80;0;0;1;0;150;retirado;Referente del arco durante la década de 2010
+Diego;Almeida;Portero;35;Brasil;33;184;79;0;0;5;0;180;retirado;Portero brasileño recordado por sus penaltis parados
+Iván;Petrov;Portero;40;Bulgaria;29;191;84;0;0;2;0;60;retirado;Internacional búlgaro que aportó experiencia europea
+Kenji;Tanaka;Portero;42;Japón;24;183;77;0;0;0;0;15;cedido;Joven portero cedido al filial para sumar minutos
+Samuel;Okafor;Portero;45;Nigeria;21;189;81;0;0;0;0;5;activo;Promesa nigeriana del equipo juvenil
+Raúl;Bermejo;Portero;50;España;36;186;82;0;0;6;0;250;retirado;El portero con más partidos en la historia del club
+André;Mensah;Portero;55;Ghana;20;190;80;0;0;0;0;2;activo;Última incorporación a la portería del club
+Sergio;Navarro;Defensa;2;España;28;182;76;8;15;12;1;110;activo;Lateral derecho titular con llegada al ataque
+Felipe;Costa;Defensa;3;Brasil;26;186;80;5;8;18;2;95;activo;Central brasileño de gran poderío físico
+Juan;Delgado;Defensa;4;España;31;184;78;12;5;20;0;180;activo;Capitán de la defensa y referente del vestuario
+Mohamed;El Fassi;Defensa;5;Marruecos;24;180;74;3;10;8;0;65;activo;Lateral izquierdo rápido y técnico
+Luka;Horvat;Defensa;6;Croacia;29;188;82;6;4;15;1;130;activo;Central croata con experiencia en competiciones europeas
+Andrés;Ruiz;Defensa;12;España;22;178;72;1;7;5;0;35;activo;Joven lateral formado en la cantera
+Matías;Oliveira;Defensa;14;Uruguay;27;185;79;4;6;14;0;100;activo;Defensa uruguayo polivalente que puede jugar en varias posiciones
+Daniel;Krause;Defensa;15;Alemania;30;190;84;7;3;22;2;145;retirado;Central alemán que fue pilar defensivo durante años
+Roberto;Vega;Defensa;16;España;33;183;77;10;8;25;1;210;retirado;Leyenda de la defensa con más de 200 partidos
+Kwame;Asante;Defensa;17;Ghana;25;187;81;2;5;9;0;55;activo;Defensa ghanés con gran velocidad y anticipación
+Pierre;Dubois;Defensa;18;Francia;28;181;75;3;12;11;0;90;retirado;Lateral francés técnico y ofensivo
+Nicolás;Paredes;Defensa;19;Chile;26;179;73;1;9;7;0;70;activo;Lateral izquierdo chileno fichado en 2024
+Álvaro;Méndez;Defensa;20;España;35;185;80;15;10;30;3;230;retirado;Histórico central que marcó una época
+Youssef;Benali;Defensa;21;Argelia;23;182;76;0;4;6;0;40;activo;Joven central argelino con gran proyección
+Viktor;Nilsson;Defensa;22;Suecia;27;191;83;4;2;13;1;85;retirado;Central sueco que aportó solidez defensiva
+Emiliano;Paz;Defensa;23;Argentina;29;184;78;3;7;16;0;115;activo;Defensa argentino versátil y experimentado
+Takeshi;Yamamoto;Defensa;24;Japón;24;176;70;1;8;4;0;30;cedido;Lateral japonés cedido desde el J-League
+Ricardo;Torres;Defensa;26;México;32;183;77;8;11;19;1;175;retirado;Defensa mexicano con gol y carácter
+Ousmane;Diallo;Defensa;27;Senegal;21;189;82;0;2;3;0;15;activo;Joven promesa senegalesa del equipo sub-21
+Martín;Iglesias;Defensa;28;España;34;180;75;6;14;21;0;195;retirado;Lateral derecho técnico y fiable durante una década
+David;Henriksen;Defensa;29;Noruega;26;192;85;5;1;10;0;60;activo;Central noruego alto y dominante en el juego aéreo
+Fabio;Marchetti;Defensa;32;Italia;30;186;79;7;6;17;2;140;retirado;Defensa italiano con clase y lectura de juego
+Oscar;Quintero;Defensa;34;Colombia;28;181;74;2;9;8;0;75;activo;Lateral colombiano con gran despliegue físico
+Jaime;Soler;Defensa;36;España;20;178;71;0;3;2;0;12;activo;Canterano español con futuro prometedor
+Erik;Lindberg;Defensa;37;Suecia;33;187;81;9;5;23;1;160;retirado;Central sueco que lideró la defensa en la Champions
+Hassan;Koné;Defensa;38;Costa de Marfil;22;185;78;1;1;4;0;20;activo;Joven defensa marfileño rápido y potente
+Alejandro;Fuentes;Defensa;39;España;31;183;76;11;7;18;0;155;retirado;Central español con buen juego de pies
+Rui;Ferreira;Defensa;41;Portugal;25;180;73;2;10;6;0;50;activo;Lateral portugués técnico y ofensivo
+Miguel;Ángel Castro;Centrocampista;6;España;27;175;70;15;25;10;0;105;activo;Centrocampista creativo y el cerebro del equipo
+Rafael;Domínguez;Centrocampista;8;España;29;178;73;20;30;14;1;140;activo;Mediapunta con gran visión de juego y gol
+Edinson;Vargas;Centrocampista;10;Uruguay;26;172;68;18;22;8;0;95;activo;Enganche uruguayo habilidoso y desequilibrante
+Bruno;Alves;Centrocampista;11;Portugal;31;180;75;25;18;16;2;160;activo;Centrocampista portugués con llegada y gol
+Karim;Zidane;Centrocampista;14;Francia;24;176;71;8;15;6;0;60;activo;Mediocampista francés joven y talentoso
+Hiroshi;Nakamura;Centrocampista;16;Japón;28;170;65;10;20;9;0;85;activo;Interior japonés técnico y trabajador
+Iván;Rakić;Centrocampista;17;Serbia;30;182;77;12;14;18;1;130;retirado;Centrocampista serbio con gran despliegue físico
+Gonzalo;Ramírez;Centrocampista;18;Argentina;25;174;69;6;12;7;0;70;activo;Mediocampista argentino con buen pase largo
+Patrick;O'Brien;Centrocampista;19;Irlanda;27;179;74;4;8;11;0;80;activo;Centrocampista irlandés luchador e incansable
+Alejandro;Moreno;Centrocampista;20;España;33;177;72;30;35;22;1;220;retirado;Leyenda del mediocampo con más goles que muchos delanteros
+Fernando;Castillo;Centrocampista;21;España;22;173;67;3;9;4;0;40;activo;Joven canterano con gran futuro por delante
+Dimitri;Papadopoulos;Centrocampista;22;Grecia;29;181;76;7;11;13;0;100;retirado;Centrocampista griego con experiencia internacional
+Léo;Beaumont;Centrocampista;23;Francia;26;176;70;9;16;8;0;75;activo;Interior francés elegante y con buen disparo
+Tomás;Aguirre;Centrocampista;24;México;28;175;71;5;13;10;0;90;activo;Mediocampista mexicano todoterreno
+Sven;Müller;Centrocampista;26;Alemania;31;183;78;14;10;19;2;150;retirado;Centrocampista alemán con clase y potencia
+Jan;Kowalski;Centrocampista;27;Polonia;24;178;72;6;8;5;0;50;activo;Interior polaco joven y prometedor
+Christian;Berg;Centrocampista;28;Dinamarca;27;180;74;8;14;12;0;95;activo;Centrocampista danés con buen golpeo
+Ángel;Heredia;Centrocampista;29;España;20;171;66;2;5;3;0;25;activo;Canterano español sub-21 con futuro brillante
+Moussa;Traoré;Centrocampista;31;Mali;23;184;77;4;7;6;0;45;activo;Pivote maliense fuerte y recuperador
+William;Scott;Centrocampista;32;Estados Unidos;25;179;73;5;11;8;0;65;activo;Centrocampista estadounidense dinámico y versátil
+Renzo;Colombo;Centrocampista;33;Italia;30;176;71;11;19;15;1;125;retirado;Interior italiano con experiencia en Serie A
+Esteban;Ríos;Centrocampista;34;Colombia;28;174;69;7;16;9;0;85;activo;Mediocampista colombiano técnico y creativo
+Hugo;Martín;Centrocampista;35;España;34;177;73;18;28;20;0;200;retirado;Centrocampista español histórico del club
+Amadou;Sylla;Centrocampista;36;Guinea;22;182;75;1;4;3;0;18;activo;Pivote guineano joven con gran capacidad defensiva
+Mateo;Suárez;Centrocampista;37;España;21;173;68;3;6;2;0;22;activo;Canterano con gran proyección ofensiva
+Lukas;Novák;Centrocampista;38;República Checa;29;180;74;9;12;14;1;110;retirado;Centrocampista checo todoterreno y fiable
+Noah;Jensen;Centrocampista;39;Dinamarca;26;178;72;6;10;7;0;70;activo;Interior danés con gol y llegada desde segunda línea
+Rubén;Gallego;Centrocampista;43;España;32;175;70;22;20;18;0;185;retirado;Centrocampista formado en casa con un palmarés brillante
+Ismaël;Bah;Centrocampista;44;Guinea;21;181;73;0;3;2;0;10;activo;Joven mediocentro defensivo con gran anticipación
+Pedro;Lozano;Delantero;7;España;28;180;76;45;15;12;1;130;activo;Extremo derecho rápido y goleador del equipo
+Thiago;Santos;Delantero;9;Brasil;26;183;79;55;20;8;0;110;activo;Delantero centro brasileño letal en el área
+Víctor;Romero;Delantero;11;España;30;178;74;35;18;10;0;145;activo;Extremo izquierdo español con regate y velocidad
+Aleksandr;Volkov;Delantero;14;Rusia;27;185;80;22;12;14;2;100;activo;Delantero ruso potente y con buen juego aéreo
+James;Wilson;Delantero;15;Inglaterra;24;181;77;18;10;6;0;70;activo;Atacante inglés versátil con buen olfato goleador
+Santiago;Herrero;Delantero;16;España;22;176;72;8;6;4;0;40;activo;Joven delantero canterano con gran instinto
+Emmanuel;Adeyemi;Delantero;17;Nigeria;25;179;75;15;8;7;0;65;activo;Extremo nigeriano con velocidad explosiva
+Cristóbal;Peña;Delantero;18;Chile;29;182;78;28;14;16;1;120;retirado;Delantero chileno goleador y carismático
+François;Lambert;Delantero;19;Francia;26;184;80;20;11;9;0;80;activo;Atacante francés con clase y definición
+Joaquín;Vidal;Delantero;20;España;34;177;73;60;25;18;0;230;retirado;Máximo goleador en la historia del CFS Malgrat
+Ali;Hassan;Delantero;21;Egipto;23;175;70;10;7;5;0;45;activo;Extremo egipcio habilidoso y desequilibrante
+Fabián;Ortega;Delantero;22;Argentina;28;180;76;25;16;11;0;105;retirado;Delantero argentino que dejó huella en el club
+Dani;Expósito;Delantero;23;España;21;174;69;5;4;2;0;25;activo;Canterano español con hambre de gol
+Milan;Jovanović;Delantero;24;Serbia;27;186;81;18;9;13;1;90;retirado;Delantero serbio potente y con buen cabezazo
+Connor;Murphy;Delantero;26;Irlanda;25;178;74;12;8;6;0;60;activo;Atacante irlandés con entrega y gol
+Kim;Seong-Jin;Delantero;27;Corea del Sur;24;176;71;9;6;4;0;50;activo;Extremo surcoreano rápido y técnico
+Abel;Gutiérrez;Delantero;28;España;33;181;77;40;22;20;2;195;retirado;Delantero histórico y segundo máximo goleador del club
+Paolo;Ferretti;Delantero;29;Italia;30;183;79;22;13;15;1;130;retirado;Delantero italiano con experiencia en la Serie A
+Omar;Saidi;Delantero;31;Túnez;22;177;72;6;5;3;0;30;activo;Joven delantero tunecino con gran potencial
+Rubén;Castaño;Delantero;32;España;26;179;75;14;10;8;0;75;activo;Atacante español versátil que puede jugar en banda o centro
+Léon;Dupont;Delantero;33;Bélgica;29;185;80;19;11;12;0;100;retirado;Delantero belga técnico y con buen juego asociativo
+Henrik;Larsen;Delantero;34;Noruega;23;188;82;7;4;5;0;35;activo;Joven delantero noruego alto y goleador
+Carlos;Medina;Delantero;36;Venezuela;27;180;76;16;9;10;0;85;activo;Atacante venezolano con buen regate y definición
+Iker;Azcona;Delantero;37;España;20;175;70;3;2;1;0;15;activo;Canterano sub-20 con proyección de estrella
+Diego;Montoya;Delantero;38;Colombia;31;182;78;30;17;14;1;155;retirado;Delantero colombiano que marcó goles decisivos
+Maxwell;Appiah;Delantero;41;Ghana;24;179;74;11;7;6;0;55;activo;Extremo ghanés con velocidad y desparpajo
+Javier;Roca;Delantero;43;España;35;178;73;50;30;22;1;240;retirado;Leyenda absoluta del club y de su delantera
+Nabil;El Amrani;Delantero;44;Marruecos;22;176;71;4;3;2;0;20;activo;Joven talento marroquí con futuro prometedor

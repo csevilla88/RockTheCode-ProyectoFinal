@@ -1,0 +1,156 @@
+import bcrypt from "bcrypt";
+import User from "../models/User.js";
+import { generateToken } from "../utils/jwt.js";
+
+/**
+ * POST /api/users/register - Registro de usuario
+ */
+export const register = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
+    if (existingUser) {
+      return res.status(400).json({ message: "El usuario o email ya existe" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    const token = generateToken(newUser);
+
+    res.status(201).json({
+      message: "Usuario registrado correctamente",
+      user: newUser,
+      token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * POST /api/users/login - Inicio de sesión
+ */
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(401).json({ message: "Credenciales incorrectas" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Credenciales incorrectas" });
+    }
+
+    const token = generateToken(user);
+
+    // Eliminamos password manualmente antes de enviar
+    const userObj = user.toJSON();
+
+    res.status(200).json({
+      message: "Login exitoso",
+      user: userObj,
+      token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET /api/users/profile - Obtener perfil del usuario autenticado
+ */
+export const getProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate("favoritePlayers");
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * PUT /api/users/profile - Actualizar perfil
+ */
+export const updateProfile = async (req, res, next) => {
+  try {
+    const { username, email, avatar } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { username, email, avatar },
+      { new: true, runValidators: true }
+    ).populate("favoritePlayers");
+
+    res.status(200).json({
+      message: "Perfil actualizado",
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * PUT /api/users/favorites/:playerId - Toggle jugador favorito
+ */
+export const toggleFavoritePlayer = async (req, res, next) => {
+  try {
+    const { playerId } = req.params;
+    const user = await User.findById(req.user._id);
+
+    const index = user.favoritePlayers.indexOf(playerId);
+    if (index === -1) {
+      user.favoritePlayers.push(playerId);
+    } else {
+      user.favoritePlayers.splice(index, 1);
+    }
+
+    await user.save();
+    const updatedUser = await User.findById(req.user._id).populate("favoritePlayers");
+
+    res.status(200).json({
+      message: index === -1 ? "Jugador añadido a favoritos" : "Jugador eliminado de favoritos",
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET /api/users - Obtener todos los usuarios (solo admin)
+ */
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().populate("favoritePlayers");
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * DELETE /api/users/:id - Eliminar usuario (solo admin)
+ */
+export const deleteUser = async (req, res, next) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.status(200).json({ message: "Usuario eliminado correctamente" });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,0 +1,11 @@
+﻿.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app_main {
+  flex: 1;
+  background: var(--bg-primary);
+}
+

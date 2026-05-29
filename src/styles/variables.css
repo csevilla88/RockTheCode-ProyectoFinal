@@ -1,0 +1,125 @@
+﻿/* ===================================
+   CFS MALGRAT - VARIABLES DE DISEÑO
+   =================================== */
+
+:root {
+  /* Colores principales del club */
+  --color-primary: #1a3a6b;
+  --color-primary-light: #2a5298;
+  --color-primary-dark: #0f2444;
+  --color-secondary: #d4af37;
+  --color-secondary-light: #e8cc6e;
+  --color-secondary-dark: #b8941f;
+
+  /* Colores de estado */
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+
+  /* Neutros */
+  --color-white: #ffffff;
+  --color-light: #f8f9fa;
+  --color-gray-100: #f1f3f5;
+  --color-gray-200: #e9ecef;
+  --color-gray-300: #dee2e6;
+  --color-gray-400: #ced4da;
+  --color-gray-500: #adb5bd;
+  --color-gray-600: #6c757d;
+  --color-gray-700: #495057;
+  --color-gray-800: #343a40;
+  --color-gray-900: #212529;
+  --color-dark: #1a1a2e;
+  --color-black: #000000;
+
+  /* Colores de fondo */
+  --bg-primary: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-dark: #1a1a2e;
+  --bg-hero: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+
+  /* Tipografía */
+  --font-primary: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Montserrat', 'Inter', sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: 2.5rem;
+  --fs-4xl: 3rem;
+  --fs-hero: 3.5rem;
+
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.75;
+
+  /* Espaciado */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Bordes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+  --border-width: 1px;
+  --border-color: var(--color-gray-200);
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 2px 8px rgba(26, 58, 107, 0.08);
+  --shadow-card-hover: 0 8px 25px rgba(26, 58, 107, 0.15);
+
+  /* Transiciones */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Layout */
+  --max-width: 1200px;
+  --header-height: 70px;
+  --sidebar-width: 280px;
+
+  /* Z-index */
+  --z-dropdown: 100;
+  --z-header: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+}
+
+/* Dark mode (opcional) */
+[data-theme="dark"] {
+  --bg-primary: #0f1923;
+  --bg-card: #1a2332;
+  --color-light: #1a2332;
+  --color-gray-100: #1e2a3a;
+  --color-gray-200: #253344;
+  --color-gray-700: #c5cdd7;
+  --color-gray-800: #e1e7ed;
+  --color-gray-900: #f0f4f8;
+  --border-color: #2a3a4d;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
