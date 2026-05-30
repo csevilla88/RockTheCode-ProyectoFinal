@@ -21,7 +21,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor para manejar errores de respuesta
+// Interceptor para manejar errores
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -41,6 +41,7 @@ export const getProfile = () => api.get("/users/profile");
 export const updateProfile = (data) => api.put("/users/profile", data);
 export const toggleFavorite = (playerId) => api.put(`/users/favorites/${playerId}`);
 export const getAllUsers = () => api.get("/users");
+export const updateUserRole = (id, role) => api.patch(`/users/${id}/role`, { role });
 export const deleteUser = (id) => api.delete(`/users/${id}`);
 
 // ============ PLAYERS ============

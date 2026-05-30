@@ -146,6 +146,79 @@
   color: var(--color-white);
 }
 
+.admin_btn-edit,
+.admin_btn-save,
+.admin_btn-cancel {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  border: 1px solid transparent;
+}
+
+.admin_btn-edit {
+  background: rgba(33, 150, 243, 0.1);
+  color: #2196f3;
+  border-color: #2196f3;
+}
+
+.admin_btn-edit:hover {
+  background: #2196f3;
+  color: var(--color-white);
+}
+
+.admin_btn-save {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.admin_btn-save:hover {
+  background: var(--color-success);
+  color: var(--color-white);
+}
+
+.admin_btn-cancel {
+  background: rgba(108, 117, 125, 0.12);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-400);
+}
+
+.admin_btn-cancel:hover {
+  background: var(--color-gray-300);
+}
+
+.admin_actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.admin_input,
+.admin_select {
+  width: 100%;
+  min-width: 90px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  font-size: var(--fs-xs);
+  font-family: var(--font-primary);
+  background: var(--color-white);
+}
+
+.admin_input:focus,
+.admin_select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.admin_inline-grid {
+  display: grid;
+  gap: 6px;
+}
+
 .admin_empty {
   text-align: center;
   color: var(--color-gray-500);

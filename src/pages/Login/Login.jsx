@@ -84,12 +84,6 @@ const Login = () => {
             Regístrate aquí
           </Link>
         </p>
-
-        <div className="auth-card_demo">
-          <p>Cuentas de prueba:</p>
-          <p><strong>Admin:</strong> admin@cfsmalgrat.com / admin123</p>
-          <p><strong>Usuario:</strong> fan@cfsmalgrat.com / user123</p>
-        </div>
       </div>
     </div>
   );

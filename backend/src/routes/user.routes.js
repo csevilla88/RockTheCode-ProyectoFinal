@@ -7,6 +7,7 @@ import {
   toggleFavoritePlayer,
   getAllUsers,
   deleteUser,
+  updateUserRole,
 } from "../controllers/user.controller.js";
 import { isAuth, isAdmin } from "../middlewares/auth.js";
 
@@ -23,6 +24,7 @@ userRouter.put("/favorites/:playerId", isAuth, toggleFavoritePlayer);
 
 // Rutas de admin
 userRouter.get("/", isAuth, isAdmin, getAllUsers);
+userRouter.patch("/:id/role", isAuth, isAdmin, updateUserRole);
 userRouter.delete("/:id", isAuth, isAdmin, deleteUser);
 
 export default userRouter;

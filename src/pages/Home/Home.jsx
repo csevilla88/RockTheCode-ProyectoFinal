@@ -56,8 +56,8 @@ const Home = () => {
             CFS <span>Malgrat</span>
           </h1>
           <p className="home_hero-subtitle">
-            Más de 100 años de historia, pasión y compromiso con el fútbol. 
-            Fuerza y Gloria.
+            Más de 35 años de historia, pasión y compromiso con el fútbol. 
+              ¡1,2,3 Malgrat!
           </p>
           <div className="home_hero-actions">
             <Link to="/jugadores" className="home_hero-btn home_hero-btn--primary">

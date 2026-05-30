@@ -154,3 +154,47 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * PATCH /api/users/:id/role - Cambiar rol de usuario (solo admin)
+ */
+export const updateUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!["admin", "user"].includes(role)) {
+      return res.status(400).json({ message: "Rol no válido" });
+    }
+
+    const targetUser = await User.findById(id);
+    if (!targetUser) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    if (req.user._id.toString() === id && role !== "admin") {
+      return res.status(400).json({
+        message: "No puedes quitarte el rol de admin a ti mismo",
+      });
+    }
+
+    if (targetUser.role === "admin" && role === "user") {
+      const adminCount = await User.countDocuments({ role: "admin" });
+      if (adminCount <= 1) {
+        return res.status(400).json({
+          message: "Debe existir al menos un usuario con rol admin",
+        });
+      }
+    }
+
+    targetUser.role = role;
+    await targetUser.save();
+
+    res.status(200).json({
+      message: "Rol actualizado correctamente",
+      user: targetUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

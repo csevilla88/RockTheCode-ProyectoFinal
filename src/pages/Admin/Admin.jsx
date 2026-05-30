@@ -2,11 +2,13 @@
 import {
   getPlayers,
   deletePlayer,
+  updatePlayer,
   getMatches,
   deleteMatch,
   getNews as fetchNews,
   deleteNews,
   getAllUsers,
+  updateUserRole,
   deleteUser,
 } from "../../api/api";
 import Loader from "../../components/Loader/Loader";
@@ -24,6 +26,8 @@ const Admin = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [editingPlayerId, setEditingPlayerId] = useState(null);
+  const [playerForm, setPlayerForm] = useState(null);
 
   const loadData = useCallback(async (tab) => {
     setLoading(true);
@@ -87,6 +91,65 @@ const Admin = () => {
     [activeTab, loadData]
   );
 
+  const startEditPlayer = useCallback((player) => {
+    setEditingPlayerId(player._id);
+    setPlayerForm({
+      name: player.name,
+      lastName: player.lastName,
+      position: player.position,
+      number: player.number,
+      nationality: player.nationality,
+      age: player.age,
+      goals: player.goals,
+      assists: player.assists,
+      matchesPlayed: player.matchesPlayed,
+      status: player.status,
+    });
+    setMessage("");
+  }, []);
+
+  const cancelEditPlayer = useCallback(() => {
+    setEditingPlayerId(null);
+    setPlayerForm(null);
+  }, []);
+
+  const handlePlayerInputChange = useCallback((key, value) => {
+    setPlayerForm((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const savePlayerEdit = useCallback(async (playerId) => {
+    if (!playerForm) return;
+
+    try {
+      const payload = {
+        ...playerForm,
+        number: Number(playerForm.number),
+        age: Number(playerForm.age),
+        goals: Number(playerForm.goals),
+        assists: Number(playerForm.assists),
+        matchesPlayed: Number(playerForm.matchesPlayed),
+      };
+
+      await updatePlayer(playerId, payload);
+      setMessage("Jugador actualizado correctamente");
+      setEditingPlayerId(null);
+      setPlayerForm(null);
+      loadData("players");
+    } catch (err) {
+      setMessage("Error: " + (err.response?.data?.message || err.message));
+    }
+  }, [playerForm, loadData]);
+
+  const handleRoleChange = useCallback(async (userId, role) => {
+    try {
+      await updateUserRole(userId, role);
+      setMessage("Rol actualizado correctamente");
+      loadData("users");
+    } catch (err) {
+      setMessage("Error: " + (err.response?.data?.message || err.message));
+    }
+  }, [loadData]);
+
   const renderTable = () => {
     if (loading) return <Loader text="Cargando datos..." />;
     if (!data.length) return <p className="admin_empty">No hay datos</p>;
@@ -110,21 +173,77 @@ const Admin = () => {
             <tbody>
               {data.map((p) => (
                 <tr key={p._id}>
-                  <td>{p.number}</td>
-                  <td><strong>{p.name} {p.lastName}</strong></td>
-                  <td>{p.position}</td>
-                  <td>{p.nationality}</td>
                   <td>
-                    <span className={`admin_badge admin_badge--${p.status}`}>
-                      {p.status}
-                    </span>
+                    {editingPlayerId === p._id ? (
+                      <input className="admin_input" type="number" value={playerForm?.number ?? ""} onChange={(e) => handlePlayerInputChange("number", e.target.value)} />
+                    ) : p.number}
                   </td>
-                  <td>{p.goals}</td>
-                  <td>{p.matchesPlayed}</td>
                   <td>
-                    <button className="admin_btn-delete" onClick={() => handleDelete(p._id)}>
-                      Eliminar
-                    </button>
+                    {editingPlayerId === p._id ? (
+                      <div className="admin_inline-grid">
+                        <input className="admin_input" value={playerForm?.name ?? ""} onChange={(e) => handlePlayerInputChange("name", e.target.value)} />
+                        <input className="admin_input" value={playerForm?.lastName ?? ""} onChange={(e) => handlePlayerInputChange("lastName", e.target.value)} />
+                      </div>
+                    ) : <strong>{p.name} {p.lastName}</strong>}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <select className="admin_select" value={playerForm?.position ?? p.position} onChange={(e) => handlePlayerInputChange("position", e.target.value)}>
+                        <option value="Portero">Portero</option>
+                        <option value="Defensa">Defensa</option>
+                        <option value="Centrocampista">Centrocampista</option>
+                        <option value="Delantero">Delantero</option>
+                      </select>
+                    ) : p.position}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <input className="admin_input" value={playerForm?.nationality ?? ""} onChange={(e) => handlePlayerInputChange("nationality", e.target.value)} />
+                    ) : p.nationality}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <select className="admin_select" value={playerForm?.status ?? p.status} onChange={(e) => handlePlayerInputChange("status", e.target.value)}>
+                        <option value="activo">activo</option>
+                        <option value="retirado">retirado</option>
+                        <option value="cedido">cedido</option>
+                      </select>
+                    ) : (
+                      <span className={`admin_badge admin_badge--${p.status}`}>
+                        {p.status}
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <input className="admin_input" type="number" value={playerForm?.goals ?? 0} onChange={(e) => handlePlayerInputChange("goals", e.target.value)} />
+                    ) : p.goals}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <input className="admin_input" type="number" value={playerForm?.matchesPlayed ?? 0} onChange={(e) => handlePlayerInputChange("matchesPlayed", e.target.value)} />
+                    ) : p.matchesPlayed}
+                  </td>
+                  <td>
+                    {editingPlayerId === p._id ? (
+                      <div className="admin_actions">
+                        <button className="admin_btn-save" onClick={() => savePlayerEdit(p._id)}>
+                          Guardar
+                        </button>
+                        <button className="admin_btn-cancel" onClick={cancelEditPlayer}>
+                          Cancelar
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="admin_actions">
+                        <button className="admin_btn-edit" onClick={() => startEditPlayer(p)}>
+                          Editar
+                        </button>
+                        <button className="admin_btn-delete" onClick={() => handleDelete(p._id)}>
+                          Eliminar
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -216,9 +335,14 @@ const Admin = () => {
                   <td><strong>{u.username}</strong></td>
                   <td>{u.email}</td>
                   <td>
-                    <span className={`admin_badge admin_badge--${u.role}`}>
-                      {u.role}
-                    </span>
+                    <select
+                      className="admin_select"
+                      value={u.role}
+                      onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                    >
+                      <option value="user">user</option>
+                      <option value="admin">admin</option>
+                    </select>
                   </td>
                   <td>{new Date(u.createdAt).toLocaleDateString("es-ES")}</td>
                   <td>
