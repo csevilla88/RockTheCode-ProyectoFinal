@@ -1,10 +1,10 @@
 ﻿# ⚽ CFS Malgrat — Portal del Club de Fútbol
 
-> **Fuerza y Gloria** · Proyecto FullStack — RockTheCode Proyecto Final
+>· Proyecto FullStack — RockTheCode Proyecto Final
 
 ## 📋 Descripción
 
-**CFS Malgrat** es un portal web FullStack para un club de fútbol ficticio, el **Club de Fútbol Sala Malgrat**, fundado en 1923. La aplicación permite a los aficionados explorar la plantilla, consultar resultados de partidos, leer noticias del club y gestionar su perfil como socios.
+**CFS Malgrat** es un portal web FullStack para un club de fútbol ficticio, el **Club de Fútbol Malgrat**, fundado en 1988. La aplicación permite a los aficionados explorar la plantilla, consultar resultados de partidos, leer noticias del club y gestionar su perfil como socios.
 
 El proyecto está pensado para un **público aficionado al fútbol** que busca un punto central de información sobre su club: jugadores, resultados, estadísticas y noticias. Los administradores disponen de un panel para gestionar todo el contenido.
 
@@ -23,8 +23,8 @@ RockTheCode-ProyectoFinal/
 │   ├── index.js                      # Entry point del servidor
 │   ├── .env.example                  # Variables de entorno de ejemplo
 │   ├── data/                         # CSVs con datos iniciales
-│   │   ├── players.csv               # 105 jugadores
-│   │   ├── matches.csv               # 55 partidos
+│   │   ├── players.csv               # 97 jugadores
+│   │   ├── matches.csv               # 56 partidos
 │   │   └── news.csv                  # 25 noticias
 │   └── src/
 │       ├── config/
@@ -103,13 +103,13 @@ RockTheCode-ProyectoFinal/
 - Jugadores favoritos (relación con Players)
 - Avatar opcional con Cloudinary
 
-### 2. Players (Jugadores) — 105 registros
+### 2. Players (Jugadores) — 97 registros
 - Datos completos: nombre, posición, dorsal, nacionalidad, estadísticas
 - Estados: `activo`, `retirado`, `cedido`
 - Imagen opcional con Cloudinary
 - **Referenciado por**: Matches (goleadores), Users (favoritos), News (relacionados)
 
-### 3. Matches (Partidos) — 55 registros
+### 3. Matches (Partidos) — 56 registros
 - Liga, Copa del Rey, Champions League, Amistosos
 - Goleadores con referencia a Players (ObjectId + minuto)
 - Estadísticas: asistencia, árbitro, temporada
@@ -128,6 +128,8 @@ RockTheCode-ProyectoFinal/
 | Añadir jugadores favoritos | ❌ | ✅ | ✅ |
 | Ver perfil propio | ❌ | ✅ | ✅ |
 | Panel de administración | ❌ | ❌ | ✅ |
+| Cambiar rol de usuarios | ❌ | ❌ | ✅ |
+| Editar jugadores desde panel admin | ❌ | ❌ | ✅ |
 | CRUD de contenido | ❌ | ❌ | ✅ |
 
 ## ⚛️ Hooks Avanzados Utilizados
@@ -186,8 +188,8 @@ cp .env.example .env
 npm run seed
 ```
 Esto leerá los archivos CSV de `data/` y creará:
-- 105 jugadores
-- 55 partidos (con goleadores vinculados a jugadores)
+- 97 jugadores
+- 56 partidos (con goleadores vinculados a jugadores)
 - 25 noticias (con relaciones a jugadores y partidos)
 - 2 usuarios de prueba (admin + user)
 
@@ -209,14 +211,13 @@ npm run dev
 | Rol | Email | Contraseña |
 |-----|-------|------------|
 | Admin | admin@cfsmalgrat.com | admin123 |
-| Usuario | fan@cfsmalgrat.com | user123 |
 
 ## 📊 Datos Generados (CSV)
 
 Los datos se generan a partir de archivos CSV ubicados en `backend/data/`:
 
-- **players.csv**: 105 jugadores con nombre, apellido, posición, dorsal, nacionalidad, edad, altura, peso, goles, asistencias, tarjetas, partidos jugados, estado y biografía
-- **matches.csv**: 55 partidos de Liga, Copa del Rey, Champions League y Amistosos con goleadores referenciados por nombre
+- **players.csv**: 97 jugadores con nombre, apellido, posición, dorsal, nacionalidad, edad, altura, peso, goles, asistencias, tarjetas, partidos jugados, estado y biografía
+- **matches.csv**: 56 partidos de Liga, Copa del Rey, Champions League y Amistosos con goleadores referenciados por nombre
 - **news.csv**: 25 noticias categorizadas con referencias a jugadores y partidos
 
 El script `seed.js` utiliza el módulo `fs` de Node.js para leer los CSV, parsearlos y crear las relaciones entre colecciones (ObjectId references) automáticamente.
@@ -239,6 +240,7 @@ El script `seed.js` utiliza el módulo `fs` de Node.js para leer los CSV, parsea
 - `PUT /api/users/profile` — Actualizar perfil (auth)
 - `PUT /api/users/favorites/:playerId` — Toggle favorito (auth)
 - `GET /api/users` — Listar usuarios (admin)
+- `PATCH /api/users/:id/role` — Cambiar rol de usuario (admin)
 - `DELETE /api/users/:id` — Eliminar usuario (admin)
 
 ### Players
@@ -266,8 +268,8 @@ El script `seed.js` utiliza el módulo `fs` de Node.js para leer los CSV, parsea
 
 ## 👤 Autor
 
-Proyecto final del bootcamp **RockTheCode** — Desarrollo FullStack con Node.js y React.
+Cristian Sevilla Fernandez
+Proyecto final **RockTheCode** — Desarrollo FullStack con Node.js y React.
 
 ---
 
-*CFS Malgrat es un club ficticio creado con fines educativos. Todos los datos son inventados.*
