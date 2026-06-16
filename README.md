@@ -1,8 +1,8 @@
-﻿# CFS Malgrat — Portal del Club de Fútbol Sala
+﻿# CFS Malgrat — Portal del Club de Fútbol
 
 > Proyecto Final FullStack del bootcamp **RockTheCode** (Node.js + React + MongoDB).
 
-Portal web para un club ficticio de fútbol sala. Permite consultar la plantilla, partidos y noticias, gestionar el perfil de usuario y administrar el contenido desde un panel de administración.
+Portal web para un club ficticio de fútbol. Permite consultar la plantilla, partidos y noticias, gestionar el perfil de usuario y administrar el contenido desde un panel de administración.
 
 ---
 
@@ -12,11 +12,11 @@ Portal web para un club ficticio de fútbol sala. Permite consultar la plantilla
 RockTheCode-ProyectoFinal/
 ├── backend/            # API REST (Node.js + Express + MongoDB)
 │   ├── README.md       # Documentación específica del backend
-│   ├── .env.example
+│   ├── .env
 │   └── package.json
 ├── frontend/           # SPA (React 19 + Vite + React Router)
 │   ├── README.md       # Documentación específica del frontend
-│   ├── .env.example
+│   ├── .env
 │   └── package.json
 ├── .gitignore
 ├── package.json        # Scripts raíz para arrancar todo a la vez
@@ -154,7 +154,6 @@ en el repositorio:
 
 - [render.yaml](./render.yaml) — Blueprint del servicio web para el backend.
 - [frontend/vercel.json](./frontend/vercel.json) — Build + fallback SPA.
-- [netlify.toml](./netlify.toml) — Alternativa si prefieres Netlify.
 
 ### 🔵 Backend en Render
 
@@ -182,15 +181,7 @@ en el repositorio:
    - `VITE_API_URL` = `https://cfs-malgrat-api.onrender.com/api` (la URL de Render).
 5. Deploy → quedará en `https://<tu-proyecto>.vercel.app`.
 
-> ⚠️ Recuerda añadir esa URL al `CORS_ORIGIN` del backend.
-
-### Variables de entorno
-
-Hay archivos `.env.example` en cada subproyecto:
-- [backend/.env.example](./backend/.env.example)
-- [frontend/.env.example](./frontend/.env.example)
-
----
+> Añadir esa URL al `CORS_ORIGIN` del backend.
 
 ## 👤 Autor
 
