@@ -26,9 +26,11 @@ const playerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    birthDate: {
+      type: Date,
+    },
     age: {
       type: Number,
-      required: true,
       min: 16,
       max: 50,
     },
@@ -78,6 +80,53 @@ const playerSchema = new mongoose.Schema(
   },
   { timestamps: true, collection: "players" }
 );
+
+/**
+ * Pre-save: si hay birthDate, calcular automáticamente la edad
+ */
+playerSchema.pre("save", function (next) {
+  if (this.birthDate) {
+    const today = new Date();
+    const birth = new Date(this.birthDate);
+    let computedAge = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      computedAge -= 1;
+    }
+    this.age = computedAge;
+  }
+  next();
+});
+
+/**
+ * Pre-update (findByIdAndUpdate, etc.) – recalcula la edad si llega birthDate
+ */
+playerSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() || {};
+  const birthDate = update.birthDate || update.$set?.birthDate;
+  if (birthDate) {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let computedAge = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      computedAge -= 1;
+    }
+    if (update.$set) {
+      update.$set.age = computedAge;
+    } else {
+      update.age = computedAge;
+    }
+    this.setUpdate(update);
+  }
+  next();
+});
 
 playerSchema.set("toJSON", {
   transform: (doc, ret) => {

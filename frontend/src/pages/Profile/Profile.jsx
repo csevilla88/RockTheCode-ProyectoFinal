@@ -1,11 +1,33 @@
-﻿import { useCallback, useMemo } from "react";
+﻿import { useCallback, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { toggleFavorite } from "../../api/api";
+import { toggleFavorite, getProfile } from "../../api/api";
 import "./Profile.css";
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
+
+  /**
+   * Al montar, refrescamos siempre el perfil para asegurarnos
+   * de tener los `favoritePlayers` POPULADOS (objetos completos
+   * con nombre, dorsal, etc.) y no solo los IDs que devuelve
+   * el endpoint de login. Así no hace falta recargar la página.
+   */
+  useEffect(() => {
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const res = await getProfile();
+        if (!cancelled) updateUser(res.data);
+      } catch (err) {
+        console.error("Error refrescando perfil:", err);
+      }
+    };
+    refresh();
+    return () => {
+      cancelled = true;
+    };
+  }, [updateUser]);
 
   const handleRemoveFavorite = useCallback(
     async (playerId) => {

@@ -1,0 +1,39 @@
+# ===========================================
+# Render.com - Despliegue del backend (API)
+# ===========================================
+# Para usarlo:
+#  1. Sube el repo a GitHub
+#  2. En render.com → "New +" → "Blueprint" → conecta el repo
+#  3. Render leerá este archivo y creará el servicio web
+#  4. Configura las variables de entorno marcadas como `sync: false`
+#     desde el dashboard de Render una vez creado el servicio.
+# ===========================================
+
+services:
+  - type: web
+    name: cfs-malgrat-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: PORT
+        value: 3000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

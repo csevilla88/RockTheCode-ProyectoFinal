@@ -17,12 +17,13 @@ export const register = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
+    const createdUser = await User.create({
       username,
       email,
       password: hashedPassword,
     });
 
+    const newUser = await User.findById(createdUser._id).populate("favoritePlayers");
     const token = generateToken(newUser);
 
     res.status(201).json({
@@ -42,7 +43,9 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email })
+      .select("+password")
+      .populate("favoritePlayers");
     if (!user) {
       return res.status(401).json({ message: "Credenciales incorrectas" });
     }

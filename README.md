@@ -146,6 +146,52 @@ npm run dev
 
 ---
 
+## ☁️ Despliegue en producción
+
+El proyecto está preparado para desplegarse en **Render** (backend) y
+**Vercel** (frontend). Los archivos de configuración están incluidos
+en el repositorio:
+
+- [render.yaml](./render.yaml) — Blueprint del servicio web para el backend.
+- [frontend/vercel.json](./frontend/vercel.json) — Build + fallback SPA.
+- [netlify.toml](./netlify.toml) — Alternativa si prefieres Netlify.
+
+### 🔵 Backend en Render
+
+1. Sube el repositorio a GitHub.
+2. En [render.com](https://render.com) → **New +** → **Blueprint** → conecta el repo.
+3. Render leerá [render.yaml](./render.yaml) y propondrá crear el servicio `cfs-malgrat-api`.
+4. Una vez creado, ve a **Environment** y rellena las variables marcadas
+   como `sync: false`:
+   - `MONGO_URI` → tu cluster de MongoDB Atlas.
+   - `JWT_SECRET` → cadena aleatoria larga.
+   - `CLOUDINARY_*` → credenciales de Cloudinary.
+   - `CORS_ORIGIN` → URL del frontend en Vercel (p.ej. `https://cfs-malgrat.vercel.app`).
+5. Render despliega automáticamente. La API quedará en `https://cfs-malgrat-api.onrender.com`.
+6. Health check: `GET /api/health` debe devolver `200`.
+
+> 💡 Para poblar la base de datos en producción, lanza una sola vez
+> `npm run seed` desde tu máquina apuntando a la `MONGO_URI` de Atlas.
+
+### ⚪ Frontend en Vercel
+
+1. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repo.
+2. **Root Directory**: `frontend`.
+3. Vercel detecta Vite automáticamente y usa [frontend/vercel.json](./frontend/vercel.json).
+4. Añade la variable de entorno:
+   - `VITE_API_URL` = `https://cfs-malgrat-api.onrender.com/api` (la URL de Render).
+5. Deploy → quedará en `https://<tu-proyecto>.vercel.app`.
+
+> ⚠️ Recuerda añadir esa URL al `CORS_ORIGIN` del backend.
+
+### Variables de entorno
+
+Hay archivos `.env.example` en cada subproyecto:
+- [backend/.env.example](./backend/.env.example)
+- [frontend/.env.example](./frontend/.env.example)
+
+---
+
 ## 👤 Autor
 
 Cristian Sevilla — Proyecto final RockTheCode.

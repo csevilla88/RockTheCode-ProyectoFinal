@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import PublicOnlyRoute from "./components/PublicOnlyRoute/PublicOnlyRoute";
 import Home from "./pages/Home/Home";
 import Players from "./pages/Players/Players";
 import PlayerDetail from "./pages/PlayerDetail/PlayerDetail";
@@ -32,8 +33,22 @@ function App() {
               <Route path="/partidos/:id" element={<MatchDetail />} />
               <Route path="/noticias" element={<News />} />
               <Route path="/noticias/:id" element={<NewsDetail />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Register />} />
+              <Route
+                path="/login"
+                element={
+                  <PublicOnlyRoute>
+                    <Login />
+                  </PublicOnlyRoute>
+                }
+              />
+              <Route
+                path="/registro"
+                element={
+                  <PublicOnlyRoute>
+                    <Register />
+                  </PublicOnlyRoute>
+                }
+              />
               <Route
                 path="/perfil"
                 element={

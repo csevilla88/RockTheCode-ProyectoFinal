@@ -71,6 +71,22 @@ export const createPlayer = async (req, res, next) => {
       playerData.image = req.file.path;
     }
 
+    // Si llega birthDate, ignoramos `age`: el hook pre-save lo calcula.
+    if (playerData.birthDate) {
+      delete playerData.age;
+    }
+
+    // Castear numéricos que pueden venir como string desde FormData
+    [
+      "number", "age", "height", "weight", "goals", "assists",
+      "yellowCards", "redCards", "matchesPlayed",
+    ].forEach((k) => {
+      if (playerData[k] !== undefined && playerData[k] !== "") {
+        const n = Number(playerData[k]);
+        if (!Number.isNaN(n)) playerData[k] = n;
+      }
+    });
+
     const newPlayer = await Player.create(playerData);
     res.status(201).json({
       message: "Jugador creado correctamente",
@@ -83,30 +99,55 @@ export const createPlayer = async (req, res, next) => {
 
 /**
  * PUT /api/players/:id - Actualizar un jugador (solo admin)
+ *
+ * Usamos `findById` + asignar campos + `save()` (en lugar de
+ * `findByIdAndUpdate`) para que se dispare el hook `pre("save")` del
+ * modelo. Eso garantiza que si llega `birthDate` la edad se recalcula
+ * automáticamente, y que los validadores se ejecutan contra el
+ * documento completo.
  */
 export const updatePlayer = async (req, res, next) => {
   try {
     const playerData = { ...req.body };
 
+    const existingPlayer = await Player.findById(req.params.id);
+    if (!existingPlayer) {
+      return res.status(404).json({ message: "Jugador no encontrado" });
+    }
+
     if (req.file) {
       // Eliminar imagen anterior de Cloudinary si existe
-      const existingPlayer = await Player.findById(req.params.id);
-      if (existingPlayer?.image) {
+      if (existingPlayer.image) {
         const publicId = existingPlayer.image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`cfs-malgrat/${publicId}`);
+        try {
+          await cloudinary.uploader.destroy(`cfs-malgrat/${publicId}`);
+        } catch (err) {
+          console.warn("No se pudo borrar la imagen antigua:", err.message);
+        }
       }
       playerData.image = req.file.path;
     }
 
-    const updatedPlayer = await Player.findByIdAndUpdate(
-      req.params.id,
-      playerData,
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedPlayer) {
-      return res.status(404).json({ message: "Jugador no encontrado" });
+    // Si llega birthDate, ignoramos cualquier `age` enviado: el hook
+    // pre-save calculará la edad correcta a partir de la fecha.
+    if (playerData.birthDate) {
+      delete playerData.age;
     }
+
+    // Castear numéricos que pueden venir como string desde FormData
+    [
+      "number", "age", "height", "weight", "goals", "assists",
+      "yellowCards", "redCards", "matchesPlayed",
+    ].forEach((k) => {
+      if (playerData[k] !== undefined && playerData[k] !== "") {
+        const n = Number(playerData[k]);
+        if (!Number.isNaN(n)) playerData[k] = n;
+      }
+    });
+
+    // Asignar y guardar (dispara hooks `pre("save")` y validadores)
+    Object.assign(existingPlayer, playerData);
+    const updatedPlayer = await existingPlayer.save();
 
     res.status(200).json({
       message: "Jugador actualizado",

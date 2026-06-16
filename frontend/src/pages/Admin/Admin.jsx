@@ -1,17 +1,26 @@
 ﻿import { useState, useCallback, useEffect } from "react";
 import {
   getPlayers,
-  deletePlayer,
+  createPlayer,
   updatePlayer,
+  deletePlayer,
   getMatches,
+  createMatch,
+  updateMatch,
   deleteMatch,
   getNews as fetchNews,
+  createNews,
+  updateNews,
   deleteNews,
   getAllUsers,
   updateUserRole,
   deleteUser,
 } from "../../api/api";
 import Loader from "../../components/Loader/Loader";
+import ConfirmDialog from "../../components/Modal/ConfirmDialog";
+import PlayerFormModal from "./PlayerFormModal";
+import MatchFormModal from "./MatchFormModal";
+import NewsFormModal from "./NewsFormModal";
 import "./Admin.css";
 
 const TABS = [
@@ -21,134 +30,185 @@ const TABS = [
   { key: "users", label: "Usuarios" },
 ];
 
+const formatDate = (value) => {
+  if (!value) return "—";
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString("es-ES");
+};
+
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("players");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
-  const [editingPlayerId, setEditingPlayerId] = useState(null);
-  const [playerForm, setPlayerForm] = useState(null);
+  const [message, setMessage] = useState(null); // { text, type }
+  const [submitting, setSubmitting] = useState(false);
 
-  const loadData = useCallback(async (tab) => {
-    setLoading(true);
-    setMessage("");
-    try {
-      let res;
-      switch (tab) {
-        case "players":
-          res = await getPlayers({ limit: 200 });
-          setData(res.data.players);
-          break;
-        case "matches":
-          res = await getMatches({ limit: 200 });
-          setData(res.data.matches);
-          break;
-        case "news":
-          res = await fetchNews({ limit: 200 });
-          setData(res.data.news);
-          break;
-        case "users":
-          res = await getAllUsers();
-          setData(res.data);
-          break;
-      }
-    } catch (err) {
-      setMessage("Error cargando datos: " + (err.response?.data?.message || err.message));
-    } finally {
-      setLoading(false);
-    }
+  // Modal estado: { type: 'players'|'matches'|'news', entity: obj|null }
+  const [formModal, setFormModal] = useState(null);
+  // Confirm dialog: { id, type }
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
+  const showMessage = useCallback((text, type = "success") => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage(null), 4000);
   }, []);
+
+  const loadData = useCallback(
+    async (tab) => {
+      setLoading(true);
+      try {
+        let res;
+        switch (tab) {
+          case "players":
+            res = await getPlayers({ limit: 500 });
+            setData(res.data.players);
+            break;
+          case "matches":
+            res = await getMatches({ limit: 500 });
+            setData(res.data.matches);
+            break;
+          case "news":
+            res = await fetchNews({ limit: 500 });
+            setData(res.data.news);
+            break;
+          case "users":
+            res = await getAllUsers();
+            setData(res.data);
+            break;
+          default:
+            break;
+        }
+      } catch (err) {
+        showMessage(
+          "Error cargando datos: " + (err.response?.data?.message || err.message),
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [showMessage]
+  );
 
   useEffect(() => {
     loadData(activeTab);
   }, [activeTab, loadData]);
 
-  const handleDelete = useCallback(
-    async (id) => {
-      if (!window.confirm("¿Estás seguro de eliminar este elemento?")) return;
+  // ============ CRUD ============
+  const performDelete = useCallback(async () => {
+    if (!confirmDelete) return;
+    const { id, type } = confirmDelete;
+    try {
+      if (type === "players") await deletePlayer(id);
+      else if (type === "matches") await deleteMatch(id);
+      else if (type === "news") await deleteNews(id);
+      else if (type === "users") await deleteUser(id);
 
+      showMessage("Elemento eliminado correctamente");
+      loadData(type);
+    } catch (err) {
+      showMessage(
+        "Error: " + (err.response?.data?.message || err.message),
+        "error"
+      );
+    }
+  }, [confirmDelete, loadData, showMessage]);
+
+  const handleSavePlayer = useCallback(
+    async (payload) => {
+      setSubmitting(true);
       try {
-        switch (activeTab) {
-          case "players":
-            await deletePlayer(id);
-            break;
-          case "matches":
-            await deleteMatch(id);
-            break;
-          case "news":
-            await deleteNews(id);
-            break;
-          case "users":
-            await deleteUser(id);
-            break;
+        if (formModal?.entity?._id) {
+          await updatePlayer(formModal.entity._id, payload);
+          showMessage("Jugador actualizado correctamente");
+        } else {
+          await createPlayer(payload);
+          showMessage("Jugador creado correctamente");
         }
-        setMessage("Elemento eliminado correctamente");
-        loadData(activeTab);
-      } catch (err) {
-        setMessage("Error: " + (err.response?.data?.message || err.message));
+        setFormModal(null);
+        loadData("players");
+      } finally {
+        setSubmitting(false);
       }
     },
-    [activeTab, loadData]
+    [formModal, loadData, showMessage]
   );
 
-  const startEditPlayer = useCallback((player) => {
-    setEditingPlayerId(player._id);
-    setPlayerForm({
-      name: player.name,
-      lastName: player.lastName,
-      position: player.position,
-      number: player.number,
-      nationality: player.nationality,
-      age: player.age,
-      goals: player.goals,
-      assists: player.assists,
-      matchesPlayed: player.matchesPlayed,
-      status: player.status,
-    });
-    setMessage("");
-  }, []);
+  const handleSaveMatch = useCallback(
+    async (payload) => {
+      setSubmitting(true);
+      try {
+        if (formModal?.entity?._id) {
+          await updateMatch(formModal.entity._id, payload);
+          showMessage("Partido actualizado correctamente");
+        } else {
+          await createMatch(payload);
+          showMessage("Partido creado correctamente");
+        }
+        setFormModal(null);
+        loadData("matches");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [formModal, loadData, showMessage]
+  );
 
-  const cancelEditPlayer = useCallback(() => {
-    setEditingPlayerId(null);
-    setPlayerForm(null);
-  }, []);
+  const handleSaveNews = useCallback(
+    async (payload) => {
+      setSubmitting(true);
+      try {
+        if (formModal?.entity?._id) {
+          await updateNews(formModal.entity._id, payload);
+          showMessage("Noticia actualizada correctamente");
+        } else {
+          await createNews(payload);
+          showMessage("Noticia creada correctamente");
+        }
+        setFormModal(null);
+        loadData("news");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [formModal, loadData, showMessage]
+  );
 
-  const handlePlayerInputChange = useCallback((key, value) => {
-    setPlayerForm((prev) => ({ ...prev, [key]: value }));
-  }, []);
+  const handleRoleChange = useCallback(
+    async (userId, role) => {
+      try {
+        await updateUserRole(userId, role);
+        showMessage("Rol actualizado correctamente");
+        loadData("users");
+      } catch (err) {
+        showMessage(
+          "Error: " + (err.response?.data?.message || err.message),
+          "error"
+        );
+      }
+    },
+    [loadData, showMessage]
+  );
 
-  const savePlayerEdit = useCallback(async (playerId) => {
-    if (!playerForm) return;
-
-    try {
-      const payload = {
-        ...playerForm,
-        number: Number(playerForm.number),
-        age: Number(playerForm.age),
-        goals: Number(playerForm.goals),
-        assists: Number(playerForm.assists),
-        matchesPlayed: Number(playerForm.matchesPlayed),
-      };
-
-      await updatePlayer(playerId, payload);
-      setMessage("Jugador actualizado correctamente");
-      setEditingPlayerId(null);
-      setPlayerForm(null);
-      loadData("players");
-    } catch (err) {
-      setMessage("Error: " + (err.response?.data?.message || err.message));
-    }
-  }, [playerForm, loadData]);
-
-  const handleRoleChange = useCallback(async (userId, role) => {
-    try {
-      await updateUserRole(userId, role);
-      setMessage("Rol actualizado correctamente");
-      loadData("users");
-    } catch (err) {
-      setMessage("Error: " + (err.response?.data?.message || err.message));
-    }
-  }, [loadData]);
+  // ============ Renderers ============
+  const renderActions = (entity, type) => (
+    <div className="admin_actions">
+      {type !== "users" && (
+        <button
+          className="admin_btn-edit"
+          onClick={() => setFormModal({ type, entity })}
+        >
+          Editar
+        </button>
+      )}
+      <button
+        className="admin_btn-delete"
+        onClick={() => setConfirmDelete({ id: entity._id, type })}
+      >
+        Eliminar
+      </button>
+    </div>
+  );
 
   const renderTable = () => {
     if (loading) return <Loader text="Cargando datos..." />;
@@ -164,8 +224,9 @@ const Admin = () => {
                 <th>Nombre</th>
                 <th>Posición</th>
                 <th>Nacionalidad</th>
+                <th>Edad</th>
                 <th>Estado</th>
-                <th>Goles</th>
+                <th>G/A</th>
                 <th>PJ</th>
                 <th>Acciones</th>
               </tr>
@@ -173,78 +234,25 @@ const Admin = () => {
             <tbody>
               {data.map((p) => (
                 <tr key={p._id}>
+                  <td>{p.number || "—"}</td>
                   <td>
-                    {editingPlayerId === p._id ? (
-                      <input className="admin_input" type="number" value={playerForm?.number ?? ""} onChange={(e) => handlePlayerInputChange("number", e.target.value)} />
-                    ) : p.number}
+                    <strong>
+                      {p.name} {p.lastName}
+                    </strong>
+                  </td>
+                  <td>{p.position}</td>
+                  <td>{p.nationality}</td>
+                  <td>{p.age ?? "—"}</td>
+                  <td>
+                    <span className={`admin_badge admin_badge--${p.status}`}>
+                      {p.status}
+                    </span>
                   </td>
                   <td>
-                    {editingPlayerId === p._id ? (
-                      <div className="admin_inline-grid">
-                        <input className="admin_input" value={playerForm?.name ?? ""} onChange={(e) => handlePlayerInputChange("name", e.target.value)} />
-                        <input className="admin_input" value={playerForm?.lastName ?? ""} onChange={(e) => handlePlayerInputChange("lastName", e.target.value)} />
-                      </div>
-                    ) : <strong>{p.name} {p.lastName}</strong>}
+                    {p.goals}/{p.assists}
                   </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <select className="admin_select" value={playerForm?.position ?? p.position} onChange={(e) => handlePlayerInputChange("position", e.target.value)}>
-                        <option value="Portero">Portero</option>
-                        <option value="Defensa">Defensa</option>
-                        <option value="Centrocampista">Centrocampista</option>
-                        <option value="Delantero">Delantero</option>
-                      </select>
-                    ) : p.position}
-                  </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <input className="admin_input" value={playerForm?.nationality ?? ""} onChange={(e) => handlePlayerInputChange("nationality", e.target.value)} />
-                    ) : p.nationality}
-                  </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <select className="admin_select" value={playerForm?.status ?? p.status} onChange={(e) => handlePlayerInputChange("status", e.target.value)}>
-                        <option value="activo">activo</option>
-                        <option value="retirado">retirado</option>
-                        <option value="cedido">cedido</option>
-                      </select>
-                    ) : (
-                      <span className={`admin_badge admin_badge--${p.status}`}>
-                        {p.status}
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <input className="admin_input" type="number" value={playerForm?.goals ?? 0} onChange={(e) => handlePlayerInputChange("goals", e.target.value)} />
-                    ) : p.goals}
-                  </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <input className="admin_input" type="number" value={playerForm?.matchesPlayed ?? 0} onChange={(e) => handlePlayerInputChange("matchesPlayed", e.target.value)} />
-                    ) : p.matchesPlayed}
-                  </td>
-                  <td>
-                    {editingPlayerId === p._id ? (
-                      <div className="admin_actions">
-                        <button className="admin_btn-save" onClick={() => savePlayerEdit(p._id)}>
-                          Guardar
-                        </button>
-                        <button className="admin_btn-cancel" onClick={cancelEditPlayer}>
-                          Cancelar
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="admin_actions">
-                        <button className="admin_btn-edit" onClick={() => startEditPlayer(p)}>
-                          Editar
-                        </button>
-                        <button className="admin_btn-delete" onClick={() => handleDelete(p._id)}>
-                          Eliminar
-                        </button>
-                      </div>
-                    )}
-                  </td>
+                  <td>{p.matchesPlayed}</td>
+                  <td>{renderActions(p, "players")}</td>
                 </tr>
               ))}
             </tbody>
@@ -267,20 +275,20 @@ const Admin = () => {
             <tbody>
               {data.map((m) => (
                 <tr key={m._id}>
-                  <td>{new Date(m.date).toLocaleDateString("es-ES")}</td>
-                  <td><strong>{m.opponent}</strong></td>
+                  <td>{formatDate(m.date)}</td>
+                  <td>
+                    <strong>{m.opponent}</strong>
+                  </td>
                   <td>{m.competition}</td>
                   <td>
                     <span className={`admin_badge admin_badge--${m.result}`}>
                       {m.result}
                     </span>
                   </td>
-                  <td>{m.goalsFor} - {m.goalsAgainst}</td>
                   <td>
-                    <button className="admin_btn-delete" onClick={() => handleDelete(m._id)}>
-                      Eliminar
-                    </button>
+                    {m.goalsFor} - {m.goalsAgainst}
                   </td>
+                  <td>{renderActions(m, "matches")}</td>
                 </tr>
               ))}
             </tbody>
@@ -302,15 +310,13 @@ const Admin = () => {
             <tbody>
               {data.map((n) => (
                 <tr key={n._id}>
-                  <td>{new Date(n.date).toLocaleDateString("es-ES")}</td>
-                  <td><strong>{n.title}</strong></td>
+                  <td>{formatDate(n.date)}</td>
+                  <td>
+                    <strong>{n.title}</strong>
+                  </td>
                   <td>{n.category}</td>
                   <td>{n.author}</td>
-                  <td>
-                    <button className="admin_btn-delete" onClick={() => handleDelete(n._id)}>
-                      Eliminar
-                    </button>
-                  </td>
+                  <td>{renderActions(n, "news")}</td>
                 </tr>
               ))}
             </tbody>
@@ -332,7 +338,9 @@ const Admin = () => {
             <tbody>
               {data.map((u) => (
                 <tr key={u._id}>
-                  <td><strong>{u.username}</strong></td>
+                  <td>
+                    <strong>{u.username}</strong>
+                  </td>
                   <td>{u.email}</td>
                   <td>
                     <select
@@ -344,12 +352,8 @@ const Admin = () => {
                       <option value="admin">admin</option>
                     </select>
                   </td>
-                  <td>{new Date(u.createdAt).toLocaleDateString("es-ES")}</td>
-                  <td>
-                    <button className="admin_btn-delete" onClick={() => handleDelete(u._id)}>
-                      Eliminar
-                    </button>
-                  </td>
+                  <td>{formatDate(u.createdAt)}</td>
+                  <td>{renderActions(u, "users")}</td>
                 </tr>
               ))}
             </tbody>
@@ -359,6 +363,13 @@ const Admin = () => {
       default:
         return null;
     }
+  };
+
+  const canCreate = activeTab !== "users";
+  const createLabel = {
+    players: "+ Crear jugador",
+    matches: "+ Crear partido",
+    news: "+ Crear noticia",
   };
 
   return (
@@ -380,13 +391,65 @@ const Admin = () => {
         ))}
       </div>
 
-      {message && (
-        <div className={`admin_message ${message.includes("Error") ? "error" : "success"}`}>
-          {message}
+      {canCreate && (
+        <div className="admin_toolbar">
+          <button
+            className="admin_btn-create"
+            onClick={() => setFormModal({ type: activeTab, entity: null })}
+          >
+            {createLabel[activeTab]}
+          </button>
         </div>
       )}
 
+      {message && (
+        <div className={`admin_message ${message.type}`}>{message.text}</div>
+      )}
+
       <div className="admin_content">{renderTable()}</div>
+
+      {/* ===== Modales de creación / edición ===== */}
+      {formModal?.type === "players" && (
+        <PlayerFormModal
+          isOpen
+          onClose={() => setFormModal(null)}
+          onSubmit={handleSavePlayer}
+          player={formModal.entity}
+          submitting={submitting}
+        />
+      )}
+
+      {formModal?.type === "matches" && (
+        <MatchFormModal
+          isOpen
+          onClose={() => setFormModal(null)}
+          onSubmit={handleSaveMatch}
+          match={formModal.entity}
+          submitting={submitting}
+        />
+      )}
+
+      {formModal?.type === "news" && (
+        <NewsFormModal
+          isOpen
+          onClose={() => setFormModal(null)}
+          onSubmit={handleSaveNews}
+          article={formModal.entity}
+          submitting={submitting}
+        />
+      )}
+
+      {/* ===== Diálogo de confirmación de borrado ===== */}
+      <ConfirmDialog
+        isOpen={Boolean(confirmDelete)}
+        onClose={() => setConfirmDelete(null)}
+        title="¿Eliminar elemento?"
+        message="Esta acción no se puede deshacer. ¿Quieres continuar?"
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+        onConfirm={performDelete}
+      />
     </div>
   );
 };
