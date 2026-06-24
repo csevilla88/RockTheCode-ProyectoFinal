@@ -2,6 +2,9 @@
 
 SPA en React del portal **CFS Malgrat**. Consume la API del [backend](../backend/README.md).
 
+- **Demo en producción (Vercel)**: <https://rock-the-code-proyecto-final.vercel.app>
+- **API consumida (Render)**: <https://cfs-malgrat-api.onrender.com/api>
+
 ---
 
 ## 🧱 Stack

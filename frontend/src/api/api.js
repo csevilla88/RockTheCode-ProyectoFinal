@@ -35,10 +35,17 @@ api.interceptors.response.use(
 );
 
 // ============ USERS ============
-export const registerUser = (data) => api.post("/users/register", data);
+const maybeMultipart = (data) =>
+  data instanceof FormData
+    ? { headers: { "Content-Type": "multipart/form-data" } }
+    : {};
+
+export const registerUser = (data) =>
+  api.post("/users/register", data, maybeMultipart(data));
 export const loginUser = (data) => api.post("/users/login", data);
 export const getProfile = () => api.get("/users/profile");
-export const updateProfile = (data) => api.put("/users/profile", data);
+export const updateProfile = (data) =>
+  api.put("/users/profile", data, maybeMultipart(data));
 export const toggleFavorite = (playerId) => api.put(`/users/favorites/${playerId}`);
 export const getAllUsers = () => api.get("/users");
 export const updateUserRole = (id, role) => api.patch(`/users/${id}/role`, { role });

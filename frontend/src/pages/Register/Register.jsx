@@ -11,6 +11,8 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState("");
   const [localError, setLocalError] = useState("");
   const { register, loading, error, clearError } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +26,22 @@ const Register = () => {
     [clearError]
   );
 
+  const handleAvatarChange = useCallback(
+    (e) => {
+      clearError();
+      setLocalError("");
+      const file = e.target.files?.[0];
+      if (!file) {
+        setAvatarFile(null);
+        setAvatarPreview("");
+        return;
+      }
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
+    },
+    [clearError]
+  );
+
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -33,13 +51,24 @@ const Register = () => {
         return;
       }
 
-      const { confirmPassword, ...userData } = formData;
-      const result = await register(userData);
+      let payload;
+      if (avatarFile) {
+        payload = new FormData();
+        payload.append("username", formData.username);
+        payload.append("email", formData.email);
+        payload.append("password", formData.password);
+        payload.append("avatar", avatarFile);
+      } else {
+        const { confirmPassword, ...userData } = formData;
+        payload = userData;
+      }
+
+      const result = await register(payload);
       if (result.success) {
         navigate("/");
       }
     },
-    [formData, register, navigate]
+    [formData, avatarFile, register, navigate]
   );
 
   return (
@@ -57,6 +86,26 @@ const Register = () => {
           {(error || localError) && (
             <div className="auth-form_error">{error || localError}</div>
           )}
+
+          <div className="auth-form_avatar-field">
+            <div className="auth-form_avatar-preview">
+              {avatarPreview ? (
+                <img src={avatarPreview} alt="Previsualización del avatar" />
+              ) : (
+                <span aria-hidden="true">📷</span>
+              )}
+            </div>
+            <label htmlFor="avatar" className="auth-form_avatar-label">
+              <span>Avatar (opcional)</span>
+              <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+            </label>
+          </div>
 
           <div className="auth-form_group">
             <label htmlFor="username">Nombre de usuario</label>

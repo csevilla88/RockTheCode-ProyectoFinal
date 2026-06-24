@@ -2,6 +2,10 @@
 
 API REST del portal **CFS Malgrat**. Gestiona usuarios, autenticación, jugadores, partidos y noticias, con subida de imágenes a Cloudinary.
 
+- **API en producción (Render)**: <https://cfs-malgrat-api.onrender.com/api>
+- **Health check**: <https://cfs-malgrat-api.onrender.com/api/health>
+- **Frontend que la consume (Vercel)**: <https://rock-the-code-proyecto-final.vercel.app>
+
 ---
 
 ## 🧱 Stack

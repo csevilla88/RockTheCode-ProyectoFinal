@@ -372,6 +372,41 @@ const Admin = () => {
     news: "+ Crear noticia",
   };
 
+  const confirmDeleteEntity = confirmDelete
+    ? data.find((d) => d._id === confirmDelete.id)
+    : null;
+
+  const confirmConfig = (() => {
+    if (!confirmDelete) {
+      return {
+        title: "¿Eliminar elemento?",
+        message: "Esta acción no se puede deshacer. ¿Quieres continuar?",
+        confirmText: "Sí, eliminar",
+      };
+    }
+    if (confirmDelete.type === "users") {
+      const u = confirmDeleteEntity;
+      return {
+        title: "¿Eliminar usuario?",
+        message: u
+          ? `Vas a eliminar permanentemente al usuario «${u.username}» (${u.email}). Esta acción no se puede deshacer.`
+          : "Vas a eliminar permanentemente este usuario. Esta acción no se puede deshacer.",
+        confirmText: "Sí, eliminar usuario",
+      };
+    }
+    const labels = {
+      players: { entity: "jugador", confirm: "Sí, eliminar jugador" },
+      matches: { entity: "partido", confirm: "Sí, eliminar partido" },
+      news: { entity: "noticia", confirm: "Sí, eliminar noticia" },
+    };
+    const l = labels[confirmDelete.type] || { entity: "elemento", confirm: "Sí, eliminar" };
+    return {
+      title: `¿Eliminar ${l.entity}?`,
+      message: `Esta acción no se puede deshacer. ¿Seguro que quieres eliminar este ${l.entity}?`,
+      confirmText: l.confirm,
+    };
+  })();
+
   return (
     <div className="admin">
       <div className="admin_header">
@@ -443,9 +478,9 @@ const Admin = () => {
       <ConfirmDialog
         isOpen={Boolean(confirmDelete)}
         onClose={() => setConfirmDelete(null)}
-        title="¿Eliminar elemento?"
-        message="Esta acción no se puede deshacer. ¿Quieres continuar?"
-        confirmText="Sí, eliminar"
+        title={confirmConfig.title}
+        message={confirmConfig.message}
+        confirmText={confirmConfig.confirmText}
         cancelText="Cancelar"
         variant="danger"
         onConfirm={performDelete}

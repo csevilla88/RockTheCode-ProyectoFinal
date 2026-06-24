@@ -4,6 +4,14 @@
 
 Portal web para un club ficticio de fútbol. Permite consultar la plantilla, partidos y noticias, gestionar el perfil de usuario y administrar el contenido desde un panel de administración.
 
+## 🌐 Despliegues en producción
+
+- **Frontend (Vercel)**: <https://rock-the-code-proyecto-final.vercel.app>
+- **Backend / API (Render)**: <https://cfs-malgrat-api.onrender.com/api>
+- **Health check**: <https://cfs-malgrat-api.onrender.com/api/health>
+
+> ⚠️ El backend está desplegado en el plan gratuito de Render: la primera petición tras un periodo de inactividad puede tardar ~30 segundos en “despertar” el servicio.
+
 ---
 
 ## 📁 Estructura del repositorio
@@ -165,8 +173,8 @@ en el repositorio:
    - `MONGO_URI` → tu cluster de MongoDB Atlas.
    - `JWT_SECRET` → cadena aleatoria larga.
    - `CLOUDINARY_*` → credenciales de Cloudinary.
-   - `CORS_ORIGIN` → URL del frontend en Vercel (p.ej. `https://cfs-malgrat.vercel.app`).
-5. Render despliega automáticamente. La API quedará en `https://cfs-malgrat-api.onrender.com`.
+   - `CORS_ORIGIN` → URL del frontend en Vercel (p.ej. `https://rock-the-code-proyecto-final.vercel.app`).
+5. Render despliega automáticamente. La API quedará en <https://cfs-malgrat-api.onrender.com>.
 6. Health check: `GET /api/health` debe devolver `200`.
 
 > 💡 Para poblar la base de datos en producción, lanza una sola vez
@@ -179,7 +187,7 @@ en el repositorio:
 3. Vercel detecta Vite automáticamente y usa [frontend/vercel.json](./frontend/vercel.json).
 4. Añade la variable de entorno:
    - `VITE_API_URL` = `https://cfs-malgrat-api.onrender.com/api` (la URL de Render).
-5. Deploy → quedará en `https://<tu-proyecto>.vercel.app`.
+5. Deploy → queda publicado en <https://rock-the-code-proyecto-final.vercel.app>.
 
 > Añadir esa URL al `CORS_ORIGIN` del backend.
 

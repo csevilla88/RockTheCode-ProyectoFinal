@@ -1,11 +1,15 @@
-﻿import { useCallback, useEffect, useMemo } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { toggleFavorite, getProfile } from "../../api/api";
+import { toggleFavorite, getProfile, updateProfile } from "../../api/api";
+import ProfileFormModal from "./ProfileFormModal";
 import "./Profile.css";
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
+  const [editOpen, setEditOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState(null);
 
   /**
    * Al montar, refrescamos siempre el perfil para asegurarnos
@@ -41,6 +45,32 @@ const Profile = () => {
     [updateUser]
   );
 
+  const showMessage = useCallback((text, type = "success") => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage(null), 4000);
+  }, []);
+
+  const handleSaveProfile = useCallback(
+    async (payload) => {
+      setSubmitting(true);
+      try {
+        const res = await updateProfile(payload);
+        updateUser(res.data.user);
+        setEditOpen(false);
+        showMessage("Perfil actualizado correctamente");
+      } catch (err) {
+        showMessage(
+          err.response?.data?.message || "Error al actualizar el perfil",
+          "error"
+        );
+        throw err;
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [updateUser, showMessage]
+  );
+
   const memberSince = useMemo(() => {
     if (!user?.createdAt) return "—";
     return new Date(user.createdAt).toLocaleDateString("es-ES", {
@@ -54,6 +84,12 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
+      {message && (
+        <div className={`profile-page_message ${message.type}`}>
+          {message.text}
+        </div>
+      )}
+
       <div className="profile-page_header">
         <div className="profile-page_avatar">
           {user.avatar ? (
@@ -70,6 +106,13 @@ const Profile = () => {
           </span>
           <p className="profile-page_since">Miembro desde {memberSince}</p>
         </div>
+        <button
+          type="button"
+          className="profile-page_edit-btn"
+          onClick={() => setEditOpen(true)}
+        >
+          Editar perfil
+        </button>
       </div>
 
       <section className="profile-page_favorites">
@@ -116,6 +159,16 @@ const Profile = () => {
           </p>
         )}
       </section>
+
+      {editOpen && (
+        <ProfileFormModal
+          isOpen={editOpen}
+          onClose={() => setEditOpen(false)}
+          onSubmit={handleSaveProfile}
+          user={user}
+          submitting={submitting}
+        />
+      )}
     </div>
   );
 };

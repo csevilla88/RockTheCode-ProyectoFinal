@@ -4,6 +4,7 @@ import { generateToken } from "../utils/jwt.js";
 
 /**
  * POST /api/users/register - Registro de usuario
+ * Acepta multipart/form-data con un campo opcional `avatar` (imagen).
  */
 export const register = async (req, res, next) => {
   try {
@@ -17,11 +18,16 @@ export const register = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const createdUser = await User.create({
+    const userData = {
       username,
       email,
       password: hashedPassword,
-    });
+    };
+    if (req.file) {
+      userData.avatar = req.file.path;
+    }
+
+    const createdUser = await User.create(userData);
 
     const newUser = await User.findById(createdUser._id).populate("favoritePlayers");
     const token = generateToken(newUser);
@@ -83,15 +89,49 @@ export const getProfile = async (req, res, next) => {
 };
 
 /**
- * PUT /api/users/profile - Actualizar perfil
+ * PUT /api/users/profile - Actualizar perfil del usuario autenticado.
+ * Soporta multipart/form-data para subir una imagen de avatar.
+ * Campos opcionales: username, avatar (URL o archivo), password.
+ * NOTA: el email NO es editable: es la credencial de acceso.
  */
 export const updateProfile = async (req, res, next) => {
   try {
-    const { username, email, avatar } = req.body;
+    const { username, avatar, password } = req.body;
+    const updates = {};
+
+    if (username !== undefined && username !== "") updates.username = username;
+
+    if (req.file) {
+      updates.avatar = req.file.path;
+    } else if (avatar !== undefined) {
+      updates.avatar = avatar;
+    }
+
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({
+          message: "La contraseña debe tener al menos 6 caracteres",
+        });
+      }
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    // Comprobar duplicados de username (excluyendo al propio usuario)
+    if (updates.username) {
+      const conflict = await User.findOne({
+        _id: { $ne: req.user._id },
+        username: updates.username,
+      });
+      if (conflict) {
+        return res.status(400).json({
+          message: "El nombre de usuario ya está en uso",
+        });
+      }
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { username, email, avatar },
+      updates,
       { new: true, runValidators: true }
     ).populate("favoritePlayers");
 
